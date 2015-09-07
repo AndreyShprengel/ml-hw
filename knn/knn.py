@@ -175,4 +175,5 @@ if __name__ == "__main__":
 	for ii in xrange(10):
 		print("%i:\t" % ii + "\t".join(str(confusion[ii].get(x, 0))
 									   for x in xrange(10)))
-	print("Accuracy: %f" % knn.acccuracy(confusion))
+	acc = knn.acccuracy(confusion)
+	print("Accuracy: %f" % acc)
