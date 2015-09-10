@@ -1,5 +1,5 @@
 import random
-from numpy import zeros, sign, nditer
+from numpy import zeros, sign
 from math import exp, log
 from collections import defaultdict
 
@@ -13,7 +13,7 @@ random.seed(kSEED)
 def logRegProb(example, beta):
 		p = sigmoid(beta.dot(example.x))
 		if example.y == 1:
-			p = 1 - p
+			p = p/exp(beta.dot(example.x))
 		return p 
 def sigmoid(score, threshold=20.0):
     """
@@ -105,20 +105,19 @@ class LogReg:
         :param use_tfidf: A boolean to switch between the raw data and the tfidf representation
         :return: Return the new value of the regression coefficients
         """
-       
+		
         prob = logRegProb(train_example, self.beta)
-        print "prob: " +str(prob)
-        print "tyoe of beta " + str(self.beta.shape)
-     
-        print self.step
+        #rint self.last_update
+        
         for ii in range( len(self.beta)):
 			if train_example.x[ii] == 0:
-				self.last_update[ii] += 1
+				self.last_update[ii] =self.last_update[ii] + 1
 				continue
+			else:	
 				
-			self.beta[ii] =( self.beta[ii] + self.step(iteration) * (train_example.y - prob) * train_example.x[ii]) * pow((1 - 2 * self.step(iteration) * self.mu), self.last_update[ii])
-			self.last_update[ii] = 1
-		
+				self.beta[ii] = ( self.beta[ii] + self.step(iteration) * (train_example.y - prob) * train_example.x[ii]) * pow((1 - 2 * self.step(iteration) * self.mu), self.last_update[ii])
+				self.last_update[ii] = 1
+				
 			
 		
         return self.beta
