@@ -12,8 +12,8 @@ random.seed(kSEED)
 
 def logRegProb(example, beta):
 		p = sigmoid(beta.dot(example.x))
-		if example.y == 1:
-			p = p/exp(beta.dot(example.x))
+		#if example.y == 1:
+			#p = p/exp(beta.dot(example.x))
 		return p 
 def sigmoid(score, threshold=20.0):
     """
