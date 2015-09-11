@@ -183,6 +183,7 @@ if __name__ == "__main__":
 
     # Iterations
     update_number = 0
+    f = open("data.txt", "a")
     for pp in xrange(args.passes):
         for ii in train:
             update_number += 1
@@ -193,3 +194,16 @@ if __name__ == "__main__":
                 ho_lp, ho_acc = lr.progress(test)
                 print("Update %i\tTP %f\tHP %f\tTA %f\tHA %f" %
                       (update_number, train_lp, ho_lp, train_acc, ho_acc))
+			
+	
+	
+f.write(str(args.step) + ", " + str(ho_lp) + ", " + str(ho_acc) + "\n")
+f.close
+print lr.beta.argmax(axis=0)
+	
+print lr.beta[76]
+print vocab[76]
+	
+baseBallMax = lr.beta.argmin(axis=0)
+print lr.beta[baseBallMax]
+print vocab[baseBallMax]
