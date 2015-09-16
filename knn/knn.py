@@ -28,7 +28,6 @@ class Numbers:
 
 
 class Knearest:
-<<<<<<< HEAD
 	"""
 	kNN classifier
 	"""
