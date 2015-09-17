@@ -28,6 +28,7 @@ class Numbers:
 
 
 class Knearest:
+<<<<<<< HEAD
 	"""
 	kNN classifier
 	"""
@@ -147,6 +148,7 @@ class Knearest:
 			return float(correct) / float(total)
 		else:
 			return 0.0
+
 
 
 

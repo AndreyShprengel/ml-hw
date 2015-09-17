@@ -1,5 +1,5 @@
 import random
-from numpy import zeros, sign
+from numpy import zeros, sign, delete
 from math import exp, log
 from collections import defaultdict
 
@@ -12,8 +12,6 @@ random.seed(kSEED)
 
 def logRegProb(example, beta):
 		p = sigmoid(beta.dot(example.x))
-		#if example.y == 1:
-			#p = p/exp(beta.dot(example.x))
 		return p 
 def sigmoid(score, threshold=20.0):
     """
@@ -107,7 +105,7 @@ class LogReg:
         """
 		
         prob = logRegProb(train_example, self.beta)
-        #rint self.last_update
+        
         
         for ii in range( len(self.beta)):
 			if train_example.x[ii] == 0:
@@ -193,3 +191,6 @@ if __name__ == "__main__":
                 ho_lp, ho_acc = lr.progress(test)
                 print("Update %i\tTP %f\tHP %f\tTA %f\tHA %f" %
                       (update_number, train_lp, ho_lp, train_acc, ho_acc))
+			
+
+
