@@ -2,17 +2,33 @@ from csv import DictReader, DictWriter
 
 import numpy as np
 from numpy import array
+from nltk import PorterStemmer
+
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
 
 kTARGET_FIELD = 'spoiler'
 kTEXT_FIELD = 'sentence'
+kTROPE_FIELD = 'trope'
+kPAGE_FIELD = 'page'
+class Stemmer:
+    def __init__(self):
+		self.stemmer = PorterStemmer()
+      
 
+    def __call__(self, feature_string):
+		feature_string = [str(self.stemmer.stem(word)) for word in feature_string.split(" ")]
+		stemmed_string = "" 
+		for word in feature_string:
+			stemmed_string += word + " "
+		
+		return stemmed_string
+		
 
 class Featurizer:
 	def __init__(self):
-		self.vectorizer = CountVectorizer(ngram_range = (1,3), analyzer = "word")
+		self.vectorizer =CountVectorizer( ngram_range = (1,3), preprocessor = Stemmer())
 
 	def train_feature(self, examples):
 		return self.vectorizer.fit_transform(examples)
@@ -49,9 +65,9 @@ if __name__ == "__main__":
 			labels.append(line[kTARGET_FIELD])
 
 	print("Label set: %s" % str(labels))
-	x_train = feat.train_feature(x[kTEXT_FIELD] for x in train)
-	x_mytest = feat.test_feature(x[kTEXT_FIELD] for x in testdata)
-	x_test = feat.test_feature(x[kTEXT_FIELD] for x in test)
+	x_train = feat.train_feature(x[kTEXT_FIELD]  + " " + x[kTROPE_FIELD]  for x in train)
+	x_mytest = feat.test_feature(x[kTEXT_FIELD]  + " " + x[kTROPE_FIELD]  for x in testdata)
+	x_test = feat.test_feature(x[kTEXT_FIELD] + " " + x[kTROPE_FIELD]   for x in test)
 
 	y_train = array(list(labels.index(x[kTARGET_FIELD])
 						 for x in train))
@@ -74,7 +90,8 @@ if __name__ == "__main__":
 		o.writerow(d)
 	total = 0
 	for ii in range(len(testdata)):
-		if train[ii][kTARGET_FIELD] == labels[predictions2[ii]]:
+		if testdata[ii][kTARGET_FIELD] == labels[predictions2[ii]]:
+			print testdata[ii][kTEXT_FIELD] +  testdata[ii][kTARGET_FIELD]
 			total += 1
 	acc = float(total)/len(testdata)
 	print "acc = " + str(acc)
