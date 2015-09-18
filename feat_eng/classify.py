@@ -2,8 +2,7 @@ from csv import DictReader, DictWriter
 
 import numpy as np
 from numpy import array
-from nltk import PorterStemmer
-
+import nltk
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
@@ -14,7 +13,7 @@ kTROPE_FIELD = 'trope'
 kPAGE_FIELD = 'page'
 class Stemmer:
     def __init__(self):
-		self.stemmer = PorterStemmer()
+		self.stemmer = nltk.PorterStemmer()
       
 
     def __call__(self, feature_string):
@@ -65,9 +64,9 @@ if __name__ == "__main__":
 			labels.append(line[kTARGET_FIELD])
 
 	print("Label set: %s" % str(labels))
-	x_train = feat.train_feature(x[kTEXT_FIELD]  + " " + x[kTROPE_FIELD]  for x in train)
-	x_mytest = feat.test_feature(x[kTEXT_FIELD]  + " " + x[kTROPE_FIELD]  for x in testdata)
-	x_test = feat.test_feature(x[kTEXT_FIELD] + " " + x[kTROPE_FIELD]   for x in test)
+	x_train = feat.train_feature(x[kTEXT_FIELD]  + " " + x[kTROPE_FIELD] + y[1]  for x in train for y in nltk.pos_tag(nltk.word_tokenize(x[kTEXT_FIELD])))
+	x_mytest = feat.test_feature(x[kTEXT_FIELD]  + " " + x[kTROPE_FIELD] + y[1]  for x in testdata for y in nltk.pos_tag(nltk.word_tokenize(x[kTEXT_FIELD])))
+	x_test = feat.test_feature(x[kTEXT_FIELD] + " " + x[kTROPE_FIELD]   + y[1] for x in test for y in nltk.pos_tag(nltk.word_tokenize(x[kTEXT_FIELD])) )
 
 	y_train = array(list(labels.index(x[kTARGET_FIELD])
 						 for x in train))
