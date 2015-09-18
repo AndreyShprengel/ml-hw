@@ -1,5 +1,5 @@
 from csv import DictReader, DictWriter
-
+import argparse
 import numpy as np
 from numpy import array
 import nltk
@@ -50,13 +50,18 @@ class Featurizer:
 				print("%s: %s" % (category, " ".join(feature_names[top10])))
 
 if __name__ == "__main__":
+	parser = argparse.ArgumentParser(description='LOGREG classifier options')
+	parser.add_argument('--test', type=bool, default=False,
+						help="Whether to split training data True/False")
+	args = parser.parse_args()
 
 	# Cast to list to keep it all in memory
 	train = list(DictReader(open("../data/spoilers/train.csv", 'r')))
 	test = list(DictReader(open("../data/spoilers/test.csv", 'r')))
-	print train[0][kTARGET_FIELD]
+	
 	testdata = train[13000:len(train)-1]
-	train = train[0:13000]
+	if args.test:
+		train = train[0:13000]
 
 	feat = Featurizer()
 
