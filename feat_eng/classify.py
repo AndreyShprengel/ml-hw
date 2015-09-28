@@ -1,5 +1,5 @@
 from csv import DictReader, DictWriter
-
+import argparse
 import numpy as np
 from numpy import array
 import nltk
@@ -20,10 +20,9 @@ class Stemmer:
 		feature_string = [str(self.stemmer.stem(word)) for word in feature_string.split(" ")]
 		stemmed_string = "" 
 		for word in feature_string:
-			poss = nltk.pos_tag([word])
-			if poss[0][1] != 'NNP':
-				stemmed_string += word + " "
-			
+			if word == "death":
+				word = "die"
+			stemmed_string += word + " "
 		
 		return stemmed_string
 		
@@ -51,13 +50,18 @@ class Featurizer:
 				print("%s: %s" % (category, " ".join(feature_names[top10])))
 
 if __name__ == "__main__":
+	parser = argparse.ArgumentParser(description='LOGREG classifier options')
+	parser.add_argument('--test', type=bool, default=False,
+						help="Whether to split training data True/False")
+	args = parser.parse_args()
 
 	# Cast to list to keep it all in memory
 	train = list(DictReader(open("../data/spoilers/train.csv", 'r')))
 	test = list(DictReader(open("../data/spoilers/test.csv", 'r')))
-	print train[0][kTARGET_FIELD]
+	
 	testdata = train[13000:len(train)-1]
-	train = train[0:13000]
+	if args.test:
+		train = train[0:13000]
 
 	feat = Featurizer()
 
@@ -69,7 +73,7 @@ if __name__ == "__main__":
 	print("Label set: %s" % str(labels))
 	x_train = feat.train_feature(x[kTEXT_FIELD]  + " " + x[kTROPE_FIELD]   for x in train )
 	x_mytest = feat.test_feature(x[kTEXT_FIELD]  + " " + x[kTROPE_FIELD]   for x in testdata)
-	x_test = feat.test_feature(x[kTEXT_FIELD] + " " + x[kTROPE_FIELD]     for x in test )
+	x_test = feat.test_feature(x[kTEXT_FIELD] + " " + x[kTROPE_FIELD]   for x in test  )
 
 	y_train = array(list(labels.index(x[kTARGET_FIELD])
 						 for x in train))
