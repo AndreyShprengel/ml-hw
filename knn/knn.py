@@ -28,7 +28,7 @@ class Numbers:
 
 
 class Knearest:
-<<<<<<< HEAD
+
 	"""
 	kNN classifier
 	"""
@@ -180,3 +180,4 @@ if __name__ == "__main__":
 									   for x in xrange(10)))
 	acc = knn.acccuracy(confusion)
 	print("Accuracy: %f" % acc)
+
