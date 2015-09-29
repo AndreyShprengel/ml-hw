@@ -25,13 +25,16 @@ class Classifier:
             "Data and labels must be the same size %i vs %i" % \
             (len(data), len(labels))
         
-        print labels[0]
+        print labels
         print  1 if self.classify(data[0]) else -1
         assert all(x == 1 or x == -1 for x in labels), "Labels must be binary"
         summ = 0
         for i in range(len(data)):
             print "i: "+ str(i) 
+            print "point" + str(data[i])
             summ += labels[i] * (1 if self.classify(data[i]) else -1)
+            print "predict " + ("1" if self.classify(data[i]) else "-1")
+            print "ttrue " + str(labels[i])
         print "sum: " + str(summ)
         print "m"  + str(len(data))
         return float(summ)/(len(data))
