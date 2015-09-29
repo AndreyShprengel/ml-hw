@@ -37,6 +37,8 @@ class TestLearnability(unittest.TestCase):
         self._2d[2] = [(3, 3), (3, 4)]
         self._2d[3] = [(3, 3), (3, 4), (4, 3)]
         self._2d[4] = rad_data
+        print "RAD"
+        print rad_data
 
         self._hypotheses = lambda x: [PlaneHypothesis(0, 0, 5),
                                       PlaneHypothesis(0, 0, -5),

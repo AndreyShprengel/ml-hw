@@ -24,11 +24,17 @@ class Classifier:
         assert len(data) == len(labels), \
             "Data and labels must be the same size %i vs %i" % \
             (len(data), len(labels))
-
+        
+        print labels[0]
+        print  1 if self.classify(data[0]) else -1
         assert all(x == 1 or x == -1 for x in labels), "Labels must be binary"
-
-        # TODO: implement this function
-        return 0.0
+        summ = 0
+        for i in range(len(data)):
+            print "i: "+ str(i) 
+            summ += labels[i] * (1 if self.classify(data[i]) else -1)
+        print "sum: " + str(summ)
+        print "m"  + str(len(data))
+        return float(summ)/(len(data))
 
 
 class PlaneHypothesis(Classifier):
