@@ -155,29 +155,46 @@ def origin_plane_hypotheses(dataset):
     """
     print dataset
     thetas = set()
+    
+    #produce angles, remove divby 0 errors.
     for x in dataset:
         if x[0] == 0:
             x += .00000000001
         thetas.add(atan(x[1]/x[0]))
+
     thetas = list(thetas)
     thetas.sort()
-    print "thetas " + str(thetas)
-    planes = list()
+   
     
-    classifier_theta = thetas[0] - .0001
+    planes = list()
+    classifications =  list()
+    #create first
+    classifier_theta = thetas[0] - .00000001
     y = tan(classifier_theta)
-    planes.append(OriginPlaneHypothesis(1, y))
-    planes.append(OriginPlaneHypothesis(-1,-y))
+    posHH = OriginPlaneHypothesis(1, y)
+    negHH = OriginPlaneHypothesis(-1,-y)
+    planes.append(posHH)
+    planes.append(negHH)
+    classifications.append([posHH.classify(x) for x in dataset])
+    classifications.append([negHH.classify(x) for x in dataset])
     for i in range(len(thetas)-1):
         classifier_theta = (thetas[i]+thetas[i+1])/2 + pi/2
-        print "normal" + "(1," + str(tan(classifier_theta)) + ")"
-
         y = tan(classifier_theta)
-        planes.append(OriginPlaneHypothesis(1, y))
-        planes.append(OriginPlaneHypothesis(-1,-y))
+        #test if already classify data
         
+        posHH = OriginPlaneHypothesis(1, y)
+        negHH = OriginPlaneHypothesis(-1,-y)
+        posClass = [posHH.classify(x) for x in dataset]
+        negClass = [negHH.classify(x) for x in dataset]
+        
+        if (negHH not in classifications):
+            planes.append(negHH)
+            classifications.append(negClass)
+        if (posHH not in classifications):
+            planes.append(posHH)
+            classifications.append(posClass)
+    print "cLassificatio :" + str(classifications)  
 
-    print "size planes: " + str(len(planes))
     return iter(planes)
 
 def plane_hypotheses(dataset):
