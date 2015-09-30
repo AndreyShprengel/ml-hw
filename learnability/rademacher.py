@@ -1,6 +1,6 @@
 from random import randint, seed
 from collections import defaultdict
-from math import atan, sin, cos, pi
+from math import atan, sin, cos, pi, tan
 
 from numpy import array
 from numpy.linalg import norm
@@ -25,18 +25,10 @@ class Classifier:
             "Data and labels must be the same size %i vs %i" % \
             (len(data), len(labels))
         
-        print labels
-        print  1 if self.classify(data[0]) else -1
         assert all(x == 1 or x == -1 for x in labels), "Labels must be binary"
         summ = 0
         for i in range(len(data)):
-            print "i: "+ str(i) 
-            print "point" + str(data[i])
             summ += labels[i] * (1 if self.classify(data[i]) else -1)
-            print "predict " + ("1" if self.classify(data[i]) else "-1")
-            print "ttrue " + str(labels[i])
-        print "sum: " + str(summ)
-        print "m"  + str(len(data))
         return float(summ)/(len(data))
 
 
@@ -161,10 +153,32 @@ def origin_plane_hypotheses(dataset):
       dataset: The dataset to use to generate hypotheses
 
     """
+    print dataset
+    thetas = set()
+    for x in dataset:
+        if x[0] == 0:
+            x += .00000000001
+        thetas.add(atan(x[1]/x[0]))
+    thetas = list(thetas)
+    thetas.sort()
+    print "thetas " + str(thetas)
+    planes = list()
+    
+    classifier_theta = thetas[0] - .0001
+    y = tan(classifier_theta)
+    planes.append(OriginPlaneHypothesis(1, y))
+    planes.append(OriginPlaneHypothesis(-1,-y))
+    for i in range(len(thetas)-1):
+        classifier_theta = (thetas[i]+thetas[i+1])/2 + pi/2
+        print "normal" + "(1," + str(tan(classifier_theta)) + ")"
 
-    # TODO: Complete this function
+        y = tan(classifier_theta)
+        planes.append(OriginPlaneHypothesis(1, y))
+        planes.append(OriginPlaneHypothesis(-1,-y))
+        
 
-    yield OriginPlaneHypothesis(1.0, 0.0)
+    print "size planes: " + str(len(planes))
+    return iter(planes)
 
 def plane_hypotheses(dataset):
     """
