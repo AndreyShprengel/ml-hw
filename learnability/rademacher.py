@@ -255,7 +255,7 @@ def axis_aligned_hypotheses(dataset):
                 classifications.append([rec.classify(x) for x in dataset])
                 squares.append(rec)
             
-	print classifications
+    print classifications
             
     # TODO: complete this function
     return iter(squares)
@@ -291,9 +291,19 @@ def rademacher_estimate(dataset, hypothesis_generator, num_samples=500,
       num_samples: the number of samples to use in estimating the Rademacher
       correlation
     """
+    hyps = list(hypothesis_generator(dataset))
+    samples = list(coin_tosses(num_samples * len(dataset), random_seed))
+    samples = [samples[i:i+len(dataset)] for i in range(0, len(samples), len(dataset))]
+    print samples
+    ex = 0
+    for x in range(0,num_samples):
+        labels = samples[x]
+        ex += max([hyp.correlation(
+            dataset, labels) for hyp in hyps])
 
+        
     # TODO: complete this function
-    return 0.0
+    return ex/num_samples
 
 if __name__ == "__main__":
     print("Rademacher correlation of constant classifier %f" %
