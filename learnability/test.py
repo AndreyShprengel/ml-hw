@@ -67,6 +67,7 @@ class TestLearnability(unittest.TestCase):
 
     def test_rec_four_points(self):
         hyps = list(axis_aligned_hypotheses(self._2d[4]))
+        print "raddata" + str(self._2d[4])
         self.assertEqual(14, len(hyps))
 
     def test_plane_four_points(self):

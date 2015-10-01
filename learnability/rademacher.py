@@ -1,6 +1,7 @@
 from random import randint, seed
 from collections import defaultdict
 from math import atan, sin, cos, pi, tan
+import itertools
 
 from numpy import array
 from numpy.linalg import norm
@@ -210,7 +211,8 @@ def plane_hypotheses(dataset):
       dataset: The dataset to use to generate hypotheses
 
     """
-
+    
+    
     # Complete this for extra credit
     return
 
@@ -225,9 +227,14 @@ def axis_aligned_hypotheses(dataset):
     Args:
       dataset: The dataset to use to generate hypotheses
     """
-
+    n = len(dataset)
+    squares = list()
+    squares.append(AxisAlignedRectangle(0, 0, 0, 0))
+    for point in dataset:
+        squares.append(AxisAlignedRectangle(point[0],point[1],point[0],point[1]))
+    
     # TODO: complete this function
-    yield AxisAlignedRectangle(0, 0, 0, 0)
+    return iter(squares)
 
 
 def coin_tosses(number, random_seed=0):
