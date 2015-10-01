@@ -154,7 +154,6 @@ def origin_plane_hypotheses(dataset):
       dataset: The dataset to use to generate hypotheses
 
     """
-    print dataset
     thetas = set()
     
     #produce angles, remove divby 0 errors.
@@ -194,7 +193,7 @@ def origin_plane_hypotheses(dataset):
         if (posHH not in classifications):
             planes.append(posHH)
             classifications.append(posClass)
-    print "cLassificatio :" + str(classifications)  
+  
 
     return iter(planes)
 
@@ -229,10 +228,35 @@ def axis_aligned_hypotheses(dataset):
     """
     n = len(dataset)
     squares = list()
-    squares.append(AxisAlignedRectangle(0, 0, 0, 0))
+    classifications =  list()
+    #all neg hypothsis
+
+    rec = AxisAlignedRectangle(0, 0, 0, 0)
+    classifications.append([rec.classify(x) for x in dataset])
+    squares.append(rec)
+
+    #all single point hypothses
     for point in dataset:
-        squares.append(AxisAlignedRectangle(point[0],point[1],point[0],point[1]))
-    
+        rec = AxisAlignedRectangle(point[0],point[1],point[0],point[1])
+        classifications.append([rec.classify(x) for x in dataset])
+        squares.append(rec)
+    for x in range(n,1,-1):
+        for y in list(itertools.combinations(dataset, x)):
+ 
+            xMax = max(y, key=lambda item:item[0])[0]
+            xMin = min(y, key=lambda item:item[0])[0]
+            yMax = max(y, key=lambda item:item[1])[1]
+            yMin = min(y, key=lambda item:item[1])[1]
+             
+            rec = AxisAlignedRectangle(xMin, yMin, xMax, yMax)
+            clsf = [rec.classify(x) for x in dataset]
+            #check if classifier exists
+            if clsf not in classifications:
+                classifications.append([rec.classify(x) for x in dataset])
+                squares.append(rec)
+            
+	print classifications
+            
     # TODO: complete this function
     return iter(squares)
 
