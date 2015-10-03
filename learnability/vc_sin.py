@@ -1,4 +1,4 @@
-from math import pi, sin
+from math import pi, sin, log
 
 kSIMPLE_TRAIN = [(1, False), (2, True), (4, False), (5, True), (13, False),
                  (14, True), (19, False)]
@@ -61,7 +61,14 @@ def train_sin_classifier(data):
         "All labels must be True / False"
 
     # TODO: Compute a frequency that will correctly classify the dataset
-    frequency = 1.0
+    summ = 0
+    for x in data:
+        i = x[0]
+        print "i " + str(i)
+        yi = 1 if x[1] else -1
+        print "yi: " + str(yi)
+        summ += ((1- yi)*pow(2,i))/2
+    frequency = 1+summ
     return SinClassifier(frequency * pi)
 
 if __name__ == "__main__":
