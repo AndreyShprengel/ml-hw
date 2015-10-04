@@ -64,10 +64,9 @@ def train_sin_classifier(data):
     summ = 0
     for x in data:
         i = x[0]
-        print "i " + str(i)
         yi = 1 if x[1] else -1
-        print "yi: " + str(yi)
         summ += ((1- yi)*pow(2,i))/2
+
     frequency = 1+summ
     return SinClassifier(frequency * pi)
 
