@@ -1,4 +1,4 @@
-from numpy import array, zeros
+from numpy import array, zeros, sign
 
 kINSP = array([(1, 8, +1),
                (7, 2, -1),
@@ -55,7 +55,12 @@ def find_slack(x, y, w, b):
     Given a primal support vector instance, return the indices for all of the
     slack vectors
     """
-
     slack = set()
+    for i in range(len(x)):
+        prediction = sum(p*q for p,q in zip(x[i], w)) + b
+
+        if sign(prediction) != y[i]:
+            slack.add(i)
+
     # TODO: IMPLEMENT THIS FUNCTION
     return slack
