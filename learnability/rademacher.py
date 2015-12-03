@@ -255,7 +255,6 @@ def axis_aligned_hypotheses(dataset):
                 classifications.append([rec.classify(x) for x in dataset])
                 squares.append(rec)
             
-    print classifications
             
     # TODO: complete this function
     return iter(squares)
@@ -295,7 +294,7 @@ def rademacher_estimate(dataset, hypothesis_generator, num_samples=500,
     hyps = list(hypothesis_generator(dataset))
     samples = list(coin_tosses(num_samples * len(dataset), random_seed))
     samples = [samples[i:i+len(dataset)] for i in range(0, len(samples), len(dataset))]
-    print samples
+
     ex = 0
     for x in range(0,num_samples):
         labels = samples[x]
