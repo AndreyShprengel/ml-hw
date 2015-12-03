@@ -291,6 +291,7 @@ def rademacher_estimate(dataset, hypothesis_generator, num_samples=500,
       num_samples: the number of samples to use in estimating the Rademacher
       correlation
     """
+
     hyps = list(hypothesis_generator(dataset))
     samples = list(coin_tosses(num_samples * len(dataset), random_seed))
     samples = [samples[i:i+len(dataset)] for i in range(0, len(samples), len(dataset))]
@@ -304,6 +305,7 @@ def rademacher_estimate(dataset, hypothesis_generator, num_samples=500,
         
     # TODO: complete this function
     return ex/num_samples
+
 
 if __name__ == "__main__":
     print("Rademacher correlation of constant classifier %f" %

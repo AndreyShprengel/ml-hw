@@ -103,8 +103,10 @@ class VariationalBayes:
         given count
         """
 
-        # TODO: Complete this function!
-        return ones(len(gamma)) / float(len(gamma))
+        phi = []
+        for i in range(len(beta)):
+            phi.append(beta[i][word] * exp(digam(gamma[i] + digam(sum(gamma)))) )
+        return [float(i) * count/sum(phi) for i in phi]
 
     def e_step(self, local_parameter_iteration=50):
         """
@@ -158,6 +160,7 @@ class VariationalBayes:
                 print "Global iteration %i, doc %i" % \
                     (self._iteration, doc_id + 1)
 
+        self._gamma = gamma
         return topic_counts
 
     def m_step(self, topic_counts):
@@ -168,7 +171,26 @@ class VariationalBayes:
         """
 
         # TODO: Finish this function!
-        self._beta = self._beta
+        print topic_counts
+        new_beta = self._beta
+        return new_beta
+
+    def update_alpha(self, current_alpha=None, gamma=None):
+        """
+        Update the scalar parameter alpha based on a gamma matrix.  If
+        no gamma argument is supplied, use the current setting of
+        gamma.
+        """
+
+        if current_alpha is None:
+            current_alpha = self._alpha
+        if gamma is None:
+            gamma = self._gamma
+
+        # Update below line
+        new_alpha = current_alpha
+
+        return new_alpha
 
     def run_iteration(self, local_iter):
         """
@@ -183,7 +205,8 @@ class VariationalBayes:
         clock_e_step = time.time() - clock_e_step
 
         clock_m_step = time.time()
-        self.m_step(topic_counts)
+        self._beta = self.m_step(topic_counts)
+        self._alpha = self.update_alpha()
 
         clock_m_step = time.time() - clock_m_step
 
